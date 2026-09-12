@@ -32,7 +32,7 @@ def load_data():
 df = load_data()
 
 # ---------- SIDEBAR CONTROLS ----------
-st.sidebar.title("⚙️ Forecast Controls")
+st.sidebar.title("Forecast Controls")
 
 company = st.sidebar.selectbox("Select Company", sorted(df["Company"].unique()),
                                 index=sorted(df["Company"].unique()).index("AMZN")
@@ -105,9 +105,9 @@ actual_df["Type"] = "Actual"
 combined = pd.concat([actual_df, forecast_df], ignore_index=True)
 
 # ---------- HEADER ----------
-st.title("📊 3-Year Revenue, Profitability & Cash Flow Forecast")
-st.caption(f"Company: **{company}**  |  Scenario: **{scenario}**  |  "
-           f"Assumed annual revenue growth: **{growth_rate*100:.1f}%**")
+st.title("3-Year Revenue, Profitability & Cash Flow Forecast")
+st.caption(f"{company}  |  {scenario}  |  "
+           f"assumed revenue growth of {growth_rate*100:.1f}% per year")
 
 # ---------- KEY METRICS ----------
 col1, col2, col3, col4 = st.columns(4)
@@ -120,13 +120,16 @@ col4.metric(f"Operating Cash Flow ({int(final_forecast['Year'])})",
             f"${final_forecast['Cash Flow from Operating']:,.0f}M")
 
 # ---------- CHARTS ----------
-st.subheader("Revenue: Actual vs Forecast")
+st.subheader("Revenue trend")
+st.caption("Solid history through " + str(latest_year) + ", projected years after that.")
 st.line_chart(combined.set_index("Year")[["Revenue"]])
 
-st.subheader("Profitability: Gross Profit, EBITDA & Net Income")
+st.subheader("Profitability trend")
+st.caption("Gross profit, EBITDA and net income side by side.")
 st.line_chart(combined.set_index("Year")[["Gross Profit", "EBITDA", "Net Income"]])
 
-st.subheader("Operating Cash Flow: Actual vs Forecast")
+st.subheader("Cash generation")
+st.caption("Operating cash flow, actual and projected.")
 st.line_chart(combined.set_index("Year")[["Cash Flow from Operating"]])
 
 # ---------- DATA TABLE ----------
@@ -136,60 +139,63 @@ for col in ["Revenue", "Gross Profit", "EBITDA", "Net Income", "Cash Flow from O
     display_df[col] = display_df[col].round(0)
 st.dataframe(display_df.set_index("Year"), use_container_width=True)
 
-# ---------- AUTO-GENERATED INSIGHTS ----------
-def generate_insights():
-    insights = []
+# ---------- COMMENTARY ----------
+def generate_commentary():
+    lines = []
 
     # 1. Growth profile
     if growth_rate > 0.15:
-        insights.append(
-            f"📈 **High-growth profile:** {company}'s forecasted revenue growth "
-            f"({growth_rate*100:.1f}%/yr) is well above typical market growth, "
-            f"driven by strong historical momentum."
+        lines.append(
+            f"{company} is projected to grow revenue at {growth_rate*100:.1f}% "
+            f"annually, well ahead of typical market growth. This pace is driven "
+            f"by strong historical momentum, so it should be treated as an "
+            f"upside case rather than a guaranteed baseline."
         )
     elif growth_rate > 0.05:
-        insights.append(
-            f"📊 **Moderate, steady growth:** {company}'s forecasted revenue growth "
-            f"({growth_rate*100:.1f}%/yr) reflects stable, mature-business performance "
-            f"rather than explosive expansion."
+        lines.append(
+            f"{company}'s projected revenue growth of {growth_rate*100:.1f}% "
+            f"per year is steady and consistent with a mature business, rather "
+            f"than a period of rapid expansion."
         )
     else:
-        insights.append(
-            f"⚠️ **Slow/flat growth:** {company}'s forecasted revenue growth "
-            f"({growth_rate*100:.1f}%/yr) is low — worth investigating whether this is "
-            f"cyclical or a longer-term trend before committing budgets."
+        lines.append(
+            f"{company}'s projected revenue growth of {growth_rate*100:.1f}% "
+            f"per year is fairly flat. It's worth checking whether this reflects "
+            f"a temporary slowdown or a longer-term shift before this number "
+            f"is used for budget planning."
         )
 
     # 2. Profit efficiency: gap between EBITDA margin and Net margin
     margin_gap = ebitda_margin - net_margin
     if margin_gap > 0.15:
-        insights.append(
-            f"💡 **Large gap between EBITDA margin ({ebitda_margin*100:.1f}%) and Net "
-            f"margin ({net_margin*100:.1f}%):** a significant portion of operating profit "
-            f"is consumed by depreciation, interest, or taxes before it reaches the bottom "
-            f"line — worth a closer look at capital structure or capex intensity."
+        lines.append(
+            f"There's a wide gap between EBITDA margin ({ebitda_margin*100:.1f}%) "
+            f"and Net margin ({net_margin*100:.1f}%), meaning a large share of "
+            f"operating profit is absorbed by depreciation, interest, or tax "
+            f"before it reaches the bottom line. This is worth a closer look at "
+            f"the company's capital structure and capex intensity."
         )
     else:
-        insights.append(
-            f"✅ **Efficient profit conversion:** EBITDA margin ({ebitda_margin*100:.1f}%) "
-            f"and Net margin ({net_margin*100:.1f}%) are close, meaning most operating "
-            f"profit flows through to actual net income."
+        lines.append(
+            f"EBITDA margin ({ebitda_margin*100:.1f}%) and Net margin "
+            f"({net_margin*100:.1f}%) stay close together, which means most of "
+            f"the company's operating profit is actually converting into net income."
         )
 
     # 3. Cash quality: OCF margin vs Net margin
     if ocf_margin > net_margin * 1.3:
-        insights.append(
-            f"💰 **Strong cash conversion:** Operating Cash Flow margin "
-            f"({ocf_margin*100:.1f}%) is notably higher than Net Profit margin "
-            f"({net_margin*100:.1f}%), suggesting high-quality, cash-backed earnings — "
-            f"a positive signal for liquidity and reinvestment capacity."
+        lines.append(
+            f"Operating cash flow margin ({ocf_margin*100:.1f}%) runs notably "
+            f"higher than net profit margin ({net_margin*100:.1f}%). That's a "
+            f"reassuring sign — earnings are backed by real cash, not just "
+            f"accounting profit."
         )
     elif ocf_margin < net_margin * 0.7:
-        insights.append(
-            f"🔍 **Cash conversion lags reported profit:** Operating Cash Flow margin "
-            f"({ocf_margin*100:.1f}%) is lower than Net Profit margin "
-            f"({net_margin*100:.1f}%) — worth checking working capital or non-cash "
-            f"income items before relying on net income alone."
+        lines.append(
+            f"Operating cash flow margin ({ocf_margin*100:.1f}%) trails net "
+            f"profit margin ({net_margin*100:.1f}%), which suggests working "
+            f"capital or non-cash items are eating into how much of reported "
+            f"profit shows up as actual cash."
         )
 
     # 4. Scenario spread — show the range across Worst/Base/Best on this year's revenue
@@ -198,21 +204,22 @@ def generate_insights():
     worst_rev = last_actual_revenue * (1 + worst_growth) ** forecast_years
     best_rev = last_actual_revenue * (1 + best_growth) ** forecast_years
     spread_pct = ((best_rev - worst_rev) / worst_rev) * 100 if worst_rev > 0 else 0
-    insights.append(
-        f"🎯 **Scenario range:** By {latest_year + forecast_years}, projected revenue "
-        f"ranges from **${worst_rev:,.0f}M (Worst Case)** to **${best_rev:,.0f}M (Best Case)** "
-        f"— a spread of {spread_pct:.0f}%, showing how sensitive the 3-year outlook is to "
-        f"growth assumptions."
+    lines.append(
+        f"By {latest_year + forecast_years}, projected revenue ranges from "
+        f"${worst_rev:,.0f}M in the worst case to ${best_rev:,.0f}M in the best "
+        f"case — a spread of about {spread_pct:.0f}%. That gap is a useful "
+        f"reminder of how much a 3-year forecast depends on the growth "
+        f"assumption behind it."
     )
 
-    return insights
+    return lines
 
-st.subheader("🧠 Auto-Generated Insights")
-for insight in generate_insights():
-    st.info(insight)
+st.subheader("What the numbers suggest")
+for line in generate_commentary():
+    st.markdown(f"- {line}")
 
 # ---------- ASSUMPTIONS (for judges to see your methodology) ----------
-with st.expander("📌 Model Assumptions & Methodology"):
+with st.expander("Model Assumptions & Methodology"):
     st.write(f"""
     - **Revenue growth rate** used: {growth_rate*100:.1f}% per year
       (based on {years_of_history_for_cagr}-year historical CAGR of {revenue_cagr*100:.1f}%,

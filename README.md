@@ -1,42 +1,50 @@
-# 3-Year Revenue Forecasting & Profitability Dashboard
+# Revenue Forecasting & Profitability Dashboard
 
-**EFOS Global Finance Hackathon 2026 — Case 2: Revenue Forecasting & Profitability**
+Built for the EFOS Global Finance Hackathon 2026 — Case 2 (Revenue Forecasting & Profitability).
 
-An interactive FP&A tool that forecasts Revenue, Gross Profit, EBITDA, Net Income,
-and Operating Cash Flow for the next 3 years, based on a company's historical
-financials.
+## What this is
 
-## Companies covered
-Built and tested on **Amazon (AMZN)** and **NVIDIA (NVDA)**, but works for any of
-the 12 companies in the dataset (Apple, Google, Microsoft, Intel, PayPal, McDonald's,
-AIG, Barclays, PG&E, Sears).
+We built a small FP&A tool that takes a company's past financials and projects
+Revenue, Gross Profit, EBITDA, Net Income and Operating Cash Flow three years
+into the future. We tested it mainly on Amazon and NVIDIA since they represent
+two very different growth stories, but it works for any of the 12 companies in
+our dataset (Apple, Google, Microsoft, Intel, PayPal, McDonald's, AIG, Barclays,
+PG&E, Sears are also included).
 
-## How the model works
-1. **Revenue** is projected using historical CAGR (Compound Annual Growth Rate),
-   adjustable via a Best/Base/Worst case scenario multiplier, or a manual override slider.
-2. **Gross Profit, EBITDA, and Net Income** are forecasted by applying the company's
-   historical average margins (as a % of revenue) to the forecasted revenue.
-3. **Operating Cash Flow** is forecasted the same way, using the historical
-   Cash-Flow-to-Revenue ratio.
+## The logic behind the numbers
 
-This is a standard, transparent FP&A approach — every number in the forecast can be
-traced back to a historical average or growth rate, which is a deliberate design choice
-over an unexplainable "black box" model.
+We kept the forecasting method simple on purpose — the goal was something a
+finance person could actually check by hand and trust, not a black box.
 
-## Tech stack
-- Python
-- Streamlit (dashboard + deployment)
-- Pandas / NumPy (data processing & forecasting logic)
+- Revenue for the next 3 years is projected off the company's own historical
+  growth rate (CAGR), and you can shift between a Worst/Base/Best case, or type
+  in your own growth assumption if you want to test something specific.
+- Gross Profit, EBITDA and Net Income are worked out by applying the company's
+  historical average margins to the revenue we just projected.
+- Operating Cash Flow follows the same idea, using the company's own
+  cash-flow-to-revenue ratio from its history.
 
-## Data source
-[Financial Statements dataset, Kaggle](https://www.kaggle.com/) — 12 companies,
-2009–2023 historical financials.
+Every number the tool shows can be traced back to something that actually
+happened in the company's past — we didn't want to hand judges a number we
+couldn't explain the origin of.
 
-## Running locally
+## Tools used
+
+Python, pandas and Streamlit. We picked Streamlit specifically because it let
+us go from a raw CSV to a working, deployable dashboard without building a
+separate front end.
+
+## Data
+
+Kaggle's "Financial Statements" dataset — company financials from 2009 to 2023.
+
+## Running it yourself
+
 ```bash
 pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## Live demo
-[Add your Streamlit Cloud link here after deployment]
+## Live version
+
+[link goes here once deployed]

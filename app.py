@@ -206,7 +206,7 @@ def generate_commentary():
     spread_pct = ((best_rev - worst_rev) / worst_rev) * 100 if worst_rev > 0 else 0
     lines.append(
         f"By {latest_year + forecast_years}, projected revenue ranges from "
-        f"${worst_rev:,.0f}M in the worst case to ${best_rev:,.0f}M in the best "
+        f"\\${worst_rev:,.0f}M in the worst case to \\${best_rev:,.0f}M in the best "
         f"case — a spread of about {spread_pct:.0f}%. That gap is a useful "
         f"reminder of how much a 3-year forecast depends on the growth "
         f"assumption behind it."
@@ -234,4 +234,3 @@ with st.expander("Model Assumptions & Methodology"):
       in early-stage FP&A models.
     """)
 
-st.caption("Built for EFOS Global Finance Hackathon 2026 — Case 2: Revenue Forecasting & Profitability")

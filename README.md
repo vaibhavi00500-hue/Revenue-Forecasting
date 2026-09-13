@@ -1,6 +1,6 @@
 # Revenue Forecasting & Profitability Dashboard
 
-Built for the EFOS Global Finance Hackathon 2026 — Case 2 (Revenue Forecasting & Profitability).
+Built for the EFOS Global Finance Hackathon 2026 - Case 2 (Revenue Forecasting & Profitability).
 
 ## What this is
 
@@ -13,7 +13,7 @@ PG&E, Sears are also included).
 
 ## The logic behind the numbers
 
-We kept the forecasting method simple on purpose — the goal was something a
+We kept the forecasting method simple on purpose: the goal was something a
 finance person could actually check by hand and trust, not a black box.
 
 - Revenue for the next 3 years is projected off the company's own historical
@@ -25,7 +25,7 @@ finance person could actually check by hand and trust, not a black box.
   cash-flow-to-revenue ratio from its history.
 
 Every number the tool shows can be traced back to something that actually
-happened in the company's past — we didn't want to hand judges a number we
+happened in the company's past, we didn't want to hand judges a number we
 couldn't explain the origin of.
 
 ## Tools used
@@ -36,7 +36,7 @@ separate front end.
 
 ## Data
 
-Kaggle's "Financial Statements" dataset — company financials from 2009 to 2023.
+Kaggle's "Financial Statements" dataset - company financials from 2009 to 2023.
 
 ## Running it yourself
 
